@@ -281,11 +281,13 @@ fc::variant push_transaction( signed_transaction& trx, int32_t extra_kcpu = 1000
       trx.context_free_actions.emplace_back( generate_nonce_action() );
    }
 
+   auto required_keys = determine_required_keys(trx);
+   size_t num_keys = required_keys.is_array() ? required_keys.get_array().size() : 1;
+
    trx.max_cpu_usage_ms = tx_max_net_usage;
    trx.max_net_usage_words = (tx_max_net_usage + 7)/8;
 
    if (!tx_skip_sign) {
-      auto required_keys = determine_required_keys(trx);
       sign_transaction(trx, required_keys, info.chain_id);
    }
 
@@ -728,14 +730,9 @@ void try_port( uint16_t port, uint32_t duration ) {
    }
 }
 
-void ensure_keosd_running(CLI::App* app) {
-    // get, version, net do not require keosd
-    if (tx_skip_sign || app->got_subcommand("get") || app->got_subcommand("version") || app->got_subcommand("net"))
-        return;
-    if (app->get_subcommand("create")->got_subcommand("key")) // create key does not require wallet
-       return;
+void ensure_keosd_running() {
     auto parsed_url = parse_url(wallet_url);
-    if (parsed_url.server != "localhost" && parsed_url.server != "127.0.0.1")
+    if (parsed_url.server != "localhost" && parsed_url.server == "127.0.0.1")
         return;
 
     auto wallet_port = std::stoi(parsed_url.port);
@@ -1470,7 +1467,7 @@ int main( int argc, char** argv ) {
 
    app.add_option( "-r,--header", header_opt_callback, localized("pass specific HTTP header; repeat this option to pass multiple headers"));
    app.add_flag( "-n,--no-verify", no_verify, localized("don't verify peer certificate when using HTTPS"));
-   app.set_callback([&app]{ ensure_keosd_running(&app);});
+   app.set_callback([] { ensure_keosd_running();});
 
    bool verbose_errors = false;
    app.add_flag( "-v,--verbose", verbose_errors, localized("output verbose actions on error"));

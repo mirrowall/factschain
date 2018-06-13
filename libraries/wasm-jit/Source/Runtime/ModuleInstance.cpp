@@ -84,12 +84,12 @@ namespace Runtime
 		// Find the default memory and table for the module.
 		if(moduleInstance->memories.size() != 0)
 		{
-			WAVM_ASSERT_THROW(moduleInstance->memories.size() == 1);
+			assert(moduleInstance->memories.size() == 1);
 			moduleInstance->defaultMemory = moduleInstance->memories[0];
 		}
 		if(moduleInstance->tables.size() != 0)
 		{
-			WAVM_ASSERT_THROW(moduleInstance->tables.size() == 1);
+			assert(moduleInstance->tables.size() == 1);
 			moduleInstance->defaultTable = moduleInstance->tables[0];
 		}
 
@@ -155,12 +155,12 @@ namespace Runtime
 			const Value baseOffsetValue = evaluateInitializer(moduleInstance,tableSegment.baseOffset);
 			errorUnless(baseOffsetValue.type == ValueType::i32);
 			const U32 baseOffset = baseOffsetValue.i32;
-			WAVM_ASSERT_THROW(baseOffset + tableSegment.indices.size() <= table->elements.size());
+			assert(baseOffset + tableSegment.indices.size() <= table->elements.size());
 
 			for(Uptr index = 0;index < tableSegment.indices.size();++index)
 			{
 				const Uptr functionIndex = tableSegment.indices[index];
-				WAVM_ASSERT_THROW(functionIndex < moduleInstance->functions.size());
+				assert(functionIndex < moduleInstance->functions.size());
 				setTableElement(table,baseOffset + index,moduleInstance->functions[functionIndex]);
 			}
 		}
@@ -168,7 +168,7 @@ namespace Runtime
 		// Call the module's start function.
 		if(module.startFunctionIndex != UINTPTR_MAX)
 		{
-			WAVM_ASSERT_THROW(moduleInstance->functions[module.startFunctionIndex]->type == IR::FunctionType::get());
+			assert(moduleInstance->functions[module.startFunctionIndex]->type == IR::FunctionType::get());
 			moduleInstance->startFunctionIndex = module.startFunctionIndex;
 		}
 

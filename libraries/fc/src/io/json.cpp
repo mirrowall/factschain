@@ -77,9 +77,6 @@ namespace fc
                 skipped = true;
                 in.get();
                 break;
-             case '\0':
-                FC_THROW_EXCEPTION( eof_exception, "unexpected end of file" );
-                break;
              default:
                 return skipped;
           }
@@ -139,11 +136,10 @@ namespace fc
                   break;
                case '\t':
                case ' ':
+               case '\0':
                case '\n':
                   in.get();
                   return token.str();
-               case '\0':
-                  FC_THROW_EXCEPTION( eof_exception, "unexpected end of file" );
                default:
                 if( isalnum( c ) || c == '_' || c == '-' || c == '.' || c == ':' || c == '/' )
                 {
@@ -267,9 +263,10 @@ namespace fc
 
       try
       {
-        while( !done )
+        char c;
+        while((c = in.peek()) && !done)
         {
-          char c = in.peek();
+
           switch( c )
           {
               case '.':
@@ -288,8 +285,6 @@ namespace fc
               case '9':
                  ss.put( in.get() );
                  break;
-              case '\0':
-                 FC_THROW_EXCEPTION( eof_exception, "unexpected end of file" );
               default:
                  if( isalnum( c ) )
                  {
@@ -392,9 +387,8 @@ namespace fc
    {
       skip_white_space(in);
       variant var;
-      while( 1 )
+      while( signed char c = in.peek() )
       {
-         signed char c = in.peek();
          switch( c )
          {
             case ' ':
@@ -429,7 +423,7 @@ namespace fc
               return token_from_stream( in );
             case 0x04: // ^D end of transmission
             case EOF:
-            case '\0':
+            case 0:
               FC_THROW_EXCEPTION( eof_exception, "unexpected end of file" );
             default:
               FC_THROW_EXCEPTION( parse_error_exception, "Unexpected char '${c}' in \"${s}\"",

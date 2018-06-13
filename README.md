@@ -1,4 +1,4 @@
-# FACTS - Rebuild the Genuine and Reliable Internet Content Ecological System
+# FACTS Chain - Rebuild the Genuine and Reliable Internet Content Ecological System
 
 Welcome to the FACTSChain source code repository!  FACTS Chain enables developers to create and deploy high-performance, horizontally scalable, blockchain infrastructure upon which decentralized applications can be built.
 

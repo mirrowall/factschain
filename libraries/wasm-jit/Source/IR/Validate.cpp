@@ -93,7 +93,10 @@ namespace IR
 		if(expectedType != actualType)
 		{
 			throw ValidationException(
-				std::string("type mismatch: expected in ") + context);
+				std::string("type mismatch: expected ") + asString(expectedType)
+				+ " but got " + asString(actualType)
+				+ " in " + context
+				);
 		}
 	}
 
@@ -102,7 +105,11 @@ namespace IR
 		// Handle polymorphic values popped off the operand stack after unconditional branches.
 		if(expectedType != actualType && expectedType != ValueType::any && actualType != ValueType::any)
 		{
-			throw ValidationException( "type mismatch" );
+			throw ValidationException(
+				std::string("type mismatch: expected ") + asString(expectedType)
+				+ " but got " + asString(actualType)
+				+ " in " + context + " operand"
+				);
 		}
 	}
 
@@ -214,13 +221,11 @@ namespace IR
 		}
 		void else_(NoImm imm)
 		{
-			if( controlStack.size() == 0 ) throw ValidationException( "control stack empty" );
 			popAndValidateResultType("if result",controlStack.back().resultType);
 			popControlStack(true);
 		}
 		void end(NoImm)
 		{
-			if( controlStack.size() == 0 ) throw ValidationException( "control stack empty" );
 			popAndValidateResultType("end result",controlStack.back().resultType);
 			popControlStack();
 		}
@@ -242,7 +247,7 @@ namespace IR
 			const ResultType defaultTargetArgumentType = getBranchTargetByDepth(imm.defaultTargetDepth).branchArgumentType;
 			popAndValidateResultType("br_table argument",defaultTargetArgumentType);
 
-			WAVM_ASSERT_THROW(imm.branchTableIndex < functionDef.branchTables.size());
+			assert(imm.branchTableIndex < functionDef.branchTables.size());
 			const std::vector<U32>& targetDepths = functionDef.branchTables[imm.branchTableIndex];
 			for(Uptr targetIndex = 0;targetIndex < targetDepths.size();++targetIndex)
 			{
@@ -453,7 +458,6 @@ namespace IR
 
 		void popControlStack(bool isElse = false)
 		{
-			if( !controlStack.size() ) throw ValidationException( "control stack empty" );
 			VALIDATE_UNLESS("stack was not empty at end of control structure: ",stack.size() > controlStack.back().outerStackSize);
 
 			if(isElse && controlStack.back().type == ControlContext::Type::ifThen)
@@ -476,7 +480,6 @@ namespace IR
 
 		void enterUnreachable()
 		{
-			if( !controlStack.size() ) throw ValidationException( "invalid control stack depth" );
 			stack.resize(controlStack.back().outerStackSize);
 			controlStack.back().isReachable = false;
 		}
@@ -501,10 +504,7 @@ namespace IR
 		
 		ValueType popOperand()
 		{
-         if(controlStack.empty()) {
-            throw ValidationException("control stack empty");
-         }
-			else if(stack.size() > controlStack.back().outerStackSize)
+			if(stack.size() > controlStack.back().outerStackSize)
 			{
 				const ValueType result = stack.back();
 				stack.pop_back();

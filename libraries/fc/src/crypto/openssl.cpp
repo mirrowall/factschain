@@ -31,20 +31,17 @@ namespace  fc
 {
     struct openssl_scope
     {
-       static path& config_path() {
-          static path cfg;
-          return cfg;
-       }
+       static path _configurationFilePath;
        openssl_scope()
        {
           ERR_load_crypto_strings(); 
           OpenSSL_add_all_algorithms();
 
-          const boost::filesystem::path& boostPath = config_path();
+          const boost::filesystem::path& boostPath = _configurationFilePath;
           if(boostPath.empty() == false)
           {
             std::string varSetting("OPENSSL_CONF=");
-            varSetting += config_path().to_native_ansi_path();
+            varSetting += _configurationFilePath.to_native_ansi_path();
 #if defined(WIN32)
             _putenv((char*)varSetting.c_str());
 #else
@@ -62,10 +59,11 @@ namespace  fc
        }
     };
 
+    path openssl_scope::_configurationFilePath;
 
     void store_configuration_path(const path& filePath)
     {
-      openssl_scope::config_path() = filePath;
+      openssl_scope::_configurationFilePath = filePath;
     }
    
     int init_openssl()

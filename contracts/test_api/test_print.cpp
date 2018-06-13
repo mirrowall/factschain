@@ -113,10 +113,3 @@ void test_print::test_printqf() {
    printqf(&z);
    prints("\n");
 }
-
-void test_print::test_print_simple() {
-    std::string const cvalue = "cvalue";
-    eosio::print(cvalue);
-    std::string value = "value";
-    eosio::print(value);
-}

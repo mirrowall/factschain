@@ -70,7 +70,7 @@ static void closeWaitList(Uptr address,WaitList* waitList)
 		Platform::Lock mapLock(addressToWaitListMapMutex);
 		if(!waitList->numReferences)
 		{
-			WAVM_ASSERT_THROW(!waitList->wakeEvents.size());
+			assert(!waitList->wakeEvents.size());
 			delete waitList;
 			addressToWaitListMap.erase(address);
 		}

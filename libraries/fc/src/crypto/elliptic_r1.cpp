@@ -7,6 +7,8 @@
 #include <fc/exception/exception.hpp>
 #include <fc/log/logger.hpp>
 
+#include <assert.h>
+
 namespace fc { namespace crypto { namespace r1 {
     namespace detail
     {
@@ -267,7 +269,7 @@ namespace fc { namespace crypto { namespace r1 {
     {
       public_key_data key = serialize();
       uint32_t check = (uint32_t)sha256::hash(key.data, sizeof(key))._hash[0];
-      static_assert(sizeof(key) + sizeof(check) == 37, ""); // hack around gcc bug: key.size() should be constexpr, but isn't
+      assert(key.size() + sizeof(check) == 37);
       array<char, 37> data;
       memcpy(data.data, key.begin(), key.size());
       memcpy(data.begin() + key.size(), (const char*)&check, sizeof(check));
@@ -307,7 +309,7 @@ namespace fc { namespace crypto { namespace r1 {
         BN_mod(secexp, secexp, order, ctx);
 
         fc::sha256 secret;
-        FC_ASSERT(BN_num_bytes(secexp) <= int64_t(sizeof(secret)));
+        assert(BN_num_bytes(secexp) <= int64_t(sizeof(secret)));
         auto shift = sizeof(secret) - BN_num_bytes(secexp);
         BN_bn2bin(secexp, ((unsigned char*)&secret)+shift);
         return regenerate( secret );
@@ -377,7 +379,7 @@ namespace fc { namespace crypto { namespace r1 {
         unsigned int buf_len = ECDSA_size(my->_key);
 //        fprintf( stderr, "%d  %d\n", buf_len, sizeof(sha256) );
         signature sig;
-        FC_ASSERT( buf_len == sizeof(sig) );
+        assert( buf_len == sizeof(sig) );
 
         if( !ECDSA_sign( 0,
                     (const unsigned char*)&digest, sizeof(digest),
@@ -400,7 +402,7 @@ namespace fc { namespace crypto { namespace r1 {
       if( !my->_key ) return dat;
       EC_KEY_set_conv_form( my->_key, POINT_CONVERSION_COMPRESSED );
       /*size_t nbytes = i2o_ECPublicKey( my->_key, nullptr ); */
-      /*FC_ASSERT( nbytes == 33 )*/
+      /*assert( nbytes == 33 )*/
       char* front = &dat.data[0];
       i2o_ECPublicKey( my->_key, (unsigned char**)&front  );
       return dat;

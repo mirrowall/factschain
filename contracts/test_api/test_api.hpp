@@ -53,7 +53,6 @@ struct test_print {
   static void test_printsf();
   static void test_printdf();
   static void test_printqf();
-  static void test_print_simple();
 };
 
 struct test_action {

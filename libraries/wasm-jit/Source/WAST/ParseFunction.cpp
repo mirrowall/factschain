@@ -69,12 +69,12 @@ namespace
 
 		~ScopedBranchTarget()
 		{
-			WAVM_ASSERT_TERMINATE(branchTargetIndex == state.branchTargetDepth);
+			assert(branchTargetIndex == state.branchTargetDepth);
 			--state.branchTargetDepth;
 			if(name)
 			{
-				WAVM_ASSERT_TERMINATE(state.branchTargetNameToIndexMap.count(name) == 1);
-				WAVM_ASSERT_TERMINATE(state.branchTargetNameToIndexMap.at(name) == branchTargetIndex);
+				assert(state.branchTargetNameToIndexMap.count(name) == 1);
+				assert(state.branchTargetNameToIndexMap.at(name) == branchTargetIndex);
 				if(previousBranchTargetIndex == UINT32_MAX)
 				{
 					state.branchTargetNameToIndexMap.erase(name);
