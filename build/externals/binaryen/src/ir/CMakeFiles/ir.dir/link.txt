@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libir.a  CMakeFiles/ir.dir/ExpressionAnalyzer.cpp.o CMakeFiles/ir.dir/ExpressionManipulator.cpp.o CMakeFiles/ir.dir/LocalGraph.cpp.o
+/usr/bin/ranlib ../../lib/libir.a

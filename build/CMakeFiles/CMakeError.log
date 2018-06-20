@@ -1,0 +1,35 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/miwoo/workspace/factsio/factschain/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_23d45/fast"
+/usr/bin/make -f CMakeFiles/cmTC_23d45.dir/build.make CMakeFiles/cmTC_23d45.dir/build
+make[1]: Entering directory '/home/miwoo/workspace/factsio/factschain/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_23d45.dir/CheckSymbolExists.c.o
+/usr/bin/clang-4.0    -o CMakeFiles/cmTC_23d45.dir/CheckSymbolExists.c.o   -c /home/miwoo/workspace/factsio/factschain/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_23d45
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_23d45.dir/link.txt --verbose=1
+/usr/bin/clang-4.0      -rdynamic CMakeFiles/cmTC_23d45.dir/CheckSymbolExists.c.o  -o cmTC_23d45 
+CMakeFiles/cmTC_23d45.dir/CheckSymbolExists.c.o: In function `main':
+/home/miwoo/workspace/factsio/factschain/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:(.text+0x19): undefined reference to `pthread_create'
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+CMakeFiles/cmTC_23d45.dir/build.make:86: recipe for target 'cmTC_23d45' failed
+make[1]: *** [cmTC_23d45] Error 1
+make[1]: Leaving directory '/home/miwoo/workspace/factsio/factschain/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_23d45/fast' failed
+make: *** [cmTC_23d45/fast] Error 2
+
+File /home/miwoo/workspace/factsio/factschain/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
