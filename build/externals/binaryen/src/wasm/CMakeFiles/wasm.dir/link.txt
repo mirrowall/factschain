@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libwasm.a  CMakeFiles/wasm.dir/literal.cpp.o CMakeFiles/wasm.dir/wasm.cpp.o CMakeFiles/wasm.dir/wasm-binary.cpp.o CMakeFiles/wasm.dir/wasm-emscripten.cpp.o CMakeFiles/wasm.dir/wasm-interpreter.cpp.o CMakeFiles/wasm.dir/wasm-io.cpp.o CMakeFiles/wasm.dir/wasm-s-parser.cpp.o CMakeFiles/wasm.dir/wasm-type.cpp.o CMakeFiles/wasm.dir/wasm-validator.cpp.o
-/usr/bin/ranlib ../../lib/libwasm.a

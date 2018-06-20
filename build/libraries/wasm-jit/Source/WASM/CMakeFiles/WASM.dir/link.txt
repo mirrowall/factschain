@@ -1,2 +1,0 @@
-/usr/bin/ar qc libWASM.a  CMakeFiles/WASM.dir/WASMSerialization.cpp.o
-/usr/bin/ranlib libWASM.a

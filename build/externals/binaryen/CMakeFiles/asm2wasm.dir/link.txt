@@ -1,1 +1,0 @@
-/usr/bin/clang++-4.0   -Wall -Wno-invalid-partial-specialization -std=c++11 -Wall -Werror -Wextra -Wno-unused-parameter -fno-omit-frame-pointer -fPIC -O3 -DNDEBUG -O2 -UNDEBUG  -rdynamic CMakeFiles/asm2wasm.dir/src/tools/asm2wasm.cpp.o  -o bin/asm2wasm lib/libemscripten-optimizer.a lib/libpasses.a lib/libwasm.a lib/libasmjs.a lib/libir.a lib/libcfg.a lib/libsupport.a -pthread 
