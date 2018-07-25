@@ -104,6 +104,7 @@ set( fc_sources
      src/network/resolve.cpp
      src/network/udp_socket.cpp
      src/network/url.cpp
+     src/network/http/http_client.cpp
      src/compress/smaz.cpp
      src/compress/zlib.cpp
      )
@@ -164,3 +165,8 @@ ELSE()
 ENDIF()
 
 add_subdirectory( test )
+install(TARGETS fc
+   LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/fc DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+

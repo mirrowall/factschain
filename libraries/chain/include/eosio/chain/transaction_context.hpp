@@ -6,7 +6,7 @@ namespace eosio { namespace chain {
 
    class transaction_context {
       private:
-         void init( uint64_t initial_net_usage );
+         void init( uint64_t initial_net_usage);
 
       public:
 
@@ -19,13 +19,14 @@ namespace eosio { namespace chain {
 
          void init_for_input_trx( uint64_t packed_trx_unprunable_size,
                                   uint64_t packed_trx_prunable_size,
-                                  uint32_t num_signatures              );
+                                  uint32_t num_signatures);
 
          void init_for_deferred_trx( fc::time_point published );
 
          void exec();
          void finalize();
          void squash();
+         void undo();
 
          inline void add_net_usage( uint64_t u ) { net_usage += u; check_net_usage(); }
 
@@ -75,9 +76,10 @@ namespace eosio { namespace chain {
          fc::microseconds              delay;
          bool                          is_input           = false;
          bool                          apply_context_free = true;
+         bool                          can_subjectively_fail = true;
 
          fc::time_point                deadline = fc::time_point::maximum();
-         fc::microseconds              leeway = fc::microseconds(1000);
+         fc::microseconds              leeway = fc::microseconds(3000);
          int64_t                       billed_cpu_time_us = 0;
 
       private:
@@ -86,6 +88,7 @@ namespace eosio { namespace chain {
 
          uint64_t                      net_limit = 0;
          bool                          net_limit_due_to_block = true;
+         bool                          net_limit_due_to_greylist = false;
          uint64_t                      eager_net_limit = 0;
          uint64_t&                     net_usage; /// reference to trace->net_usage
 
