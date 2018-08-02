@@ -53,6 +53,7 @@ struct test_print {
   static void test_printsf();
   static void test_printdf();
   static void test_printqf();
+  static void test_print_simple();
 };
 
 struct test_action {
@@ -93,10 +94,13 @@ struct test_db {
 };
 
 struct test_multi_index {
-
    static void idx64_general(uint64_t receiver, uint64_t code, uint64_t action);
    static void idx64_store_only(uint64_t receiver, uint64_t code, uint64_t action);
    static void idx64_check_without_storing(uint64_t receiver, uint64_t code, uint64_t action);
+   static void idx64_require_find_fail(uint64_t receiver, uint64_t code, uint64_t action);
+   static void idx64_require_find_fail_with_msg(uint64_t receiver, uint64_t code, uint64_t action);
+   static void idx64_require_find_sk_fail(uint64_t receiver, uint64_t code, uint64_t action);
+   static void idx64_require_find_sk_fail_with_msg(uint64_t receiver, uint64_t code, uint64_t action);
    static void idx128_general(uint64_t receiver, uint64_t code, uint64_t action);
    static void idx128_store_only(uint64_t receiver, uint64_t code, uint64_t action);
    static void idx128_check_without_storing(uint64_t receiver, uint64_t code, uint64_t action);
@@ -122,7 +126,6 @@ struct test_multi_index {
    static void idx64_run_out_of_avl_pk(uint64_t receiver, uint64_t code, uint64_t action);
    static void idx64_sk_cache_pk_lookup(uint64_t receiver, uint64_t code, uint64_t action);
    static void idx64_pk_cache_sk_lookup(uint64_t receiver, uint64_t code, uint64_t action);
-
 };
 
 struct test_crypto {
