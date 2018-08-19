@@ -177,6 +177,7 @@ namespace eosio { namespace chain {
     result.header.producer_signature = h.producer_signature;
     result.id                        = result.header.id();
 
+    // ASSUMPTION FROM controller_impl::apply_block = all untrusted blocks will have their signatures pre-validated here
     if( !trust ) {
        EOS_ASSERT( result.block_signing_key == result.signee(), wrong_signing_key, "block not signed by expected key",
                   ("result.block_signing_key", result.block_signing_key)("signee", result.signee() ) );
