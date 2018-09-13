@@ -86,10 +86,12 @@ struct abi_serializer {
       return false;
    }
 
-   static const size_t max_recursion_depth = 32; // arbitrary depth to prevent infinite recursion
-
    typedef std::function<fc::variant(fc::datastream<const char*>&, bool, bool)>  unpack_function;
    typedef std::function<void(const fc::variant&, fc::datastream<char*>&, bool, bool)>  pack_function;
+
+   void add_specialized_unpack_pack( const string& name, std::pair<abi_serializer::unpack_function, abi_serializer::pack_function> unpack_pack );
+
+   static const size_t max_recursion_depth = 32; // arbitrary depth to prevent infinite recursion
 
 private:
 
@@ -134,6 +136,7 @@ namespace impl {
              std::is_same<T, packed_transaction>::value ||
              std::is_same<T, transaction_trace>::value ||
              std::is_same<T, transaction_receipt>::value ||
+             std::is_same<T, base_action_trace>::value ||
              std::is_same<T, action_trace>::value ||
              std::is_same<T, signed_transaction>::value ||
              std::is_same<T, signed_block>::value ||
@@ -283,21 +286,25 @@ namespace impl {
          mvo("name", act.name);
          mvo("authorization", act.authorization);
 
-         auto abi = resolver(act.account);
-         if (abi.valid()) {
-            auto type = abi->get_action_type(act.name);
-            if (!type.empty()) {
-               try {
-                  mvo( "data", abi->_binary_to_variant( type, act.data, recursion_depth, deadline, max_serialization_time ));
-                  mvo("hex_data", act.data);
-               } catch(...) {
-                  // any failure to serialize data, then leave as not serailzed
+         try {
+            auto abi = resolver(act.account);
+            if (abi.valid()) {
+               auto type = abi->get_action_type(act.name);
+               if (!type.empty()) {
+                  try {
+                     mvo( "data", abi->_binary_to_variant( type, act.data, recursion_depth, deadline, max_serialization_time ));
+                     mvo("hex_data", act.data);
+                  } catch(...) {
+                     // any failure to serialize data, then leave as not serailzed
+                     mvo("data", act.data);
+                  }
+               } else {
                   mvo("data", act.data);
                }
             } else {
                mvo("data", act.data);
             }
-         } else {
+         } catch(...) {
             mvo("data", act.data);
          }
          out(name, std::move(mvo));
