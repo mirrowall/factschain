@@ -1,4 +1,5 @@
 #include <appbase/application.hpp>
+#include <appbase/version.hpp>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
@@ -19,7 +20,6 @@ class application_impl {
    public:
       application_impl():_app_options("Application Options"){
       }
-      const variables_map*    _options = nullptr;
       options_description     _app_options;
       options_description     _cfg_options;
 
@@ -43,6 +43,10 @@ void application::set_version(uint64_t version) {
 
 uint64_t application::version() const {
   return my->_version;
+}
+
+string application::version_string() const {
+   return appbase_version_string;
 }
 
 void application::set_default_data_dir(const bfs::path& data_dir) {
@@ -119,7 +123,7 @@ bool application::initialize_impl(int argc, char** argv, vector<abstract_plugin*
    }
 
    if( options.count( "version" ) ) {
-      cout << my->_version << std::endl;
+      cout << version_string() << std::endl;
       return false;
    }
 
@@ -169,7 +173,7 @@ bool application::initialize_impl(int argc, char** argv, vector<abstract_plugin*
    }
 
    bpo::store(bpo::parse_config_file<char>(config_file_name.make_preferred().string().c_str(),
-                                           my->_cfg_options, true), options);
+                                           my->_cfg_options, false), options);
 
    if(options.count("plugin") > 0)
    {
