@@ -20,7 +20,6 @@ class application_impl {
    public:
       application_impl():_app_options("Application Options"){
       }
-      const variables_map*    _options = nullptr;
       options_description     _app_options;
       options_description     _cfg_options;
 
@@ -174,7 +173,7 @@ bool application::initialize_impl(int argc, char** argv, vector<abstract_plugin*
    }
 
    bpo::store(bpo::parse_config_file<char>(config_file_name.make_preferred().string().c_str(),
-                                           my->_cfg_options, true), options);
+                                           my->_cfg_options, false), options);
 
    if(options.count("plugin") > 0)
    {
