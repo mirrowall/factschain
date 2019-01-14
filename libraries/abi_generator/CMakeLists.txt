@@ -32,7 +32,7 @@ target_link_libraries(abi_generator eosio_chain
 
 target_link_libraries(abi_generator
   LLVMX86AsmParser # MC, MCParser, Support, X86CodeGen, X86Desc, X86Info
-  LLVMX86CodeGen # Analysis, AsmPrinter, CodeGen, Core, MC, Support, Target, 
+  LLVMX86CodeGen # Analysis, AsmPrinter, CodeGen, Core, MC, Support, Target,
                  # X86AsmPrinter, X86Desc, X86Info, X86Utils
   LLVMX86Desc # MC, MCDisassembler, Object, Support, X86AsmPrinter, X86Info
   LLVMX86AsmPrinter # MC, Support, X86Utils
